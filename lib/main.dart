@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:expense_manager_flutter/widgets/route_names.dart';
+import 'package:expense_manager_flutter/widgets/trip_detail.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/new_transaction_form.dart';
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: MyHomePage(),
+      // routes: {
+      //   RouteNames.TripDetail: (context) => const TripDetail()
+      // },
       debugShowCheckedModeBanner: false,
     );
   }
@@ -79,12 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _addNewTransaction(
-      String title, double amount, DateTime chosenDate) async {
+      String title,
+      double amount,
+      DateTime chosenDate,
+      String destination,
+      String description,
+      String note) async {
     final newTxn = Transaction(
       DateTime.now().millisecondsSinceEpoch.toString(),
       title,
       amount,
       chosenDate,
+      destination,
+      description,
+      note,
     );
     int res = await DatabaseHelper.instance.insert(newTxn);
 
@@ -161,43 +174,43 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // if (isLandscape)
-            //   Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text(
-            //         "Show Chart",
-            //         style: TextStyle(
-            //           fontFamily: "Rubik",
-            //           fontSize: 16.0,
-            //           color: Colors.grey[500],
-            //         ),
-            //       ),
-            //       Switch.adaptive(
-            //         activeColor: Colors.amber[700],
-            //         value: _showChart,
-            //         onChanged: (value) => _showChartHandler(value),
-            //       ),
-            //     ],
-            //   ),
-            // if (isLandscape)
-            //   _showChart
-            //       ? myChartContainer(
-            //           height: availableHeight * 0.8,
-            //           width: 0.6 * availableWidth)
-            //       : myTransactionListContainer(
-            //           height: availableHeight * 0.8,
-            //           width: 0.6 * availableWidth),
-            // if (!isLandscape)
-            //   myChartContainer(
-            //       height: availableHeight * 0.3, width: availableWidth),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Show Chart",
+                    style: TextStyle(
+                      fontFamily: "Rubik",
+                      fontSize: 16.0,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                  Switch.adaptive(
+                    activeColor: Colors.amber[700],
+                    value: _showChart,
+                    onChanged: (value) => _showChartHandler(value),
+                  ),
+                ],
+              ),
+            if (isLandscape)
+              _showChart
+                  ? myChartContainer(
+                      height: availableHeight * 0.8,
+                      width: 0.6 * availableWidth)
+                  : myTransactionListContainer(
+                      height: availableHeight * 0.8,
+                      width: 0.6 * availableWidth),
+            if (!isLandscape)
+              myChartContainer(
+                  height: availableHeight * 0.3, width: availableWidth),
             if (!isLandscape)
               myTransactionListContainer(
                   height: availableHeight * 0.7, width: availableWidth),
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Platform.isIOS
           ? Container()
           : FloatingActionButton(

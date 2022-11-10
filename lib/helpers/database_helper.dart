@@ -11,10 +11,10 @@ final String tableTransactions = 'transactions';
 final String columnId = 'id';
 final String columnTitle = 'title';
 final String columnAmount = 'amount';
+final String columnDate = 'date';
 final String columnDestination = 'destination';
 final String columnDescription = 'description';
 final String columnNote = 'note';
-final String columnDate = 'date';
 
 // singleton class to manage the database
 class DatabaseHelper {
@@ -25,7 +25,7 @@ class DatabaseHelper {
   static final _databaseName = "transactionsDB.db";
 
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 2;
+  static final _databaseVersion = 3;
 
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -57,11 +57,10 @@ class DatabaseHelper {
             $columnId INTEGER PRIMARY KEY,
             $columnTitle TEXT NOT NULL,
             $columnAmount REAL NOT NULL,
+            $columnDate TEXT NOT NULL,
             $columnDestination TEXT NOT NULL,
             $columnDescription TEXT NOT NULL,
-            $columnNote TEXT NOT NULL,
-            $columnDate TEXT NOT NULL,
-            
+            $columnNote TEXT NOT NULL
           )
           ''');
   }
@@ -77,7 +76,15 @@ class DatabaseHelper {
   Future<txn.Transaction> getTransactionById(int id) async {
     Database db = await database;
     List<Map> res = await db.query(tableTransactions,
-        columns: [columnId, columnTitle, columnAmount, columnDestination, columnDescription, columnNote, columnDate],
+        columns: [
+          columnId,
+          columnTitle,
+          columnAmount,
+          columnDate,
+          columnDestination,
+          columnDescription,
+          columnNote,
+        ],
         where: '$columnId = ?',
         whereArgs: [id]);
 
@@ -89,8 +96,15 @@ class DatabaseHelper {
 
   Future<List<txn.Transaction>> getAllTransactions() async {
     Database db = await database;
-    List<Map> res = await db.query(tableTransactions,
-        columns: [columnId, columnTitle, columnAmount, columnDestination, columnDescription, columnNote, columnDate]);
+    List<Map> res = await db.query(tableTransactions, columns: [
+      columnId,
+      columnTitle,
+      columnAmount,
+      columnDate,
+      columnDestination,
+      columnDescription,
+      columnNote,
+    ]);
 
     List<txn.Transaction> list =
         res.map((e) => txn.Transaction.fromMap(e)).toList();
@@ -111,5 +125,10 @@ class DatabaseHelper {
     return res;
   }
 
-  // TODO: update(txn.Transaction element)
+  Future<int> updateTransactionById(int id, value) async {
+    Database db = await database;
+    int res =
+        await db.update(tableTransactions, value , where: "id = ?", whereArgs: [id]);
+    return res;
+  }
 }

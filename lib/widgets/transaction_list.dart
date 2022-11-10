@@ -1,3 +1,4 @@
+import 'package:expense_manager_flutter/widgets/trip_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +59,10 @@ class TransactionList extends StatelessWidget {
                       horizontal: 15.0,
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DetailPage(txn)));
+                      },
                       child: ListTile(
                         leading: Container(
                           width: 70.0,

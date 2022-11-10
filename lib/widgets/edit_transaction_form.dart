@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class NewTransactionForm extends StatefulWidget {
-  final Function _addTransaction;
+class EditTransactionForm extends StatefulWidget {
+  final Function _editTransaction;
 
-  NewTransactionForm(this._addTransaction);
+  EditTransactionForm(this._editTransaction);
 
   @override
-  _NewTransactionFormState createState() => _NewTransactionFormState();
+  _EditTransactionFormState createState() => _EditTransactionFormState();
 }
 
-class _NewTransactionFormState extends State<NewTransactionForm> {
+class _EditTransactionFormState extends State<EditTransactionForm> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _dateController = TextEditingController();
@@ -35,7 +35,7 @@ class _NewTransactionFormState extends State<NewTransactionForm> {
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
 
-  _NewTransactionFormState() {
+  _EditTransactionFormState() {
     bool _autoValidateToggle = false;
     _selectedDate = DateTime.now();
     _selectedTime = null;
@@ -46,7 +46,7 @@ class _NewTransactionFormState extends State<NewTransactionForm> {
     final DateTime pickedDate = await showDatePicker(
       context: context,
       initialDate: today,
-      firstDate: DateTime(2010, 1),
+      firstDate: DateTime(1900, 1),
       lastDate: today,
     );
     if (pickedDate != null && pickedDate != _selectedDate) {
@@ -98,12 +98,9 @@ class _NewTransactionFormState extends State<NewTransactionForm> {
       final txnDateTime = DateTime(_selectedDate.year, _selectedDate.month,
           _selectedDate.day, _selectedTime.hour, _selectedTime.minute);
 
-      widget._addTransaction(txnTitle, txnAmount, txnDateTime, txnDestination,
+      widget._editTransaction(txnTitle, txnAmount, txnDateTime, txnDestination,
           txnDescription, txnNote);
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Create new trip success')),
-      );
     } else {
       bool _autoValidateToggle = true;
     }
